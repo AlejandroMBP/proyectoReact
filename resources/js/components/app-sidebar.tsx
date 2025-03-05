@@ -20,37 +20,42 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Roles y permisos',
-        url: "#",
+        url: "/roles",
         icon: Shield,
     },
     {
         title: 'Almacen',
-        url: "#",
+        url: "/almacen",
         icon: Package,
     },
     {
-        title: 'pedidos',
+        title: 'ventas del dia',
+        url: "/pedido",
+        icon: ShoppingCart,
+    },
+    {
+        title: 'prestamos',
         url: "#",
         icon: ShoppingCart,
     },
     {
-        title: 'ventas',
-        url: "#",
+        title: 'tienda',
+        url: "/venta",
         icon: BarChart3,
     },
 ];
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        url: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        url: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
-    },
+    // {
+    //     title: 'Repository',
+    //     url: 'https://github.com/laravel/react-starter-kit',
+    //     icon: Folder,
+    // },
+    // {
+    //     title: 'Documentation',
+    //     url: 'https://laravel.com/docs/starter-kits',
+    //     icon: BookOpen,
+    // },
 ];
 
 export function AppSidebar() {
