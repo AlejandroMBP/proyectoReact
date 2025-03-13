@@ -30,6 +30,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/roles/{role}/permissions', [RolesPermisosController::class, 'assignPermissions'])->name('roles.assignPermissions');
 
     Route::get('/almacen', [AlmacenController::class, 'index'])->name('almacen.index');
+    Route::post('/almacen/proveedor', [AlmacenController::class, 'store'])->name('proveedor.store');
+    Route::post('/almacen/producto', [AlmacenController::class, 'crearProducto'])->name('procto.store');
+    Route::post('/almacen/producto/registrar', [AlmacenController::class, 'registrarProducto'])->name('almacen.crear');
 
     Route::get('/pedido', [PedidoController::class, 'index'])->name('pedido.index');
 
