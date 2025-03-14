@@ -1,28 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-    Stepper,
-    StepperIndicator,
-    StepperItem,
-    StepperSeparator,
-    StepperTrigger,
-} from "@/components/ui/stepper";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog";
+import { Stepper, StepperIndicator, StepperItem, StepperSeparator, StepperTrigger, } from "@/components/ui/stepper";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LoaderCircleIcon } from "lucide-react";
@@ -59,7 +39,7 @@ export default function RegistroProductoModal({ proveedores, tipoProductos }: Re
     const [descripcion, setDescripcion] = useState("");
     const [nombreProducto, setNombreProducto] = useState("");
     const [cantidad, setCantidad] = useState(0);
-    const [precio, setPrecio] = useState(0);
+    const [precio, setPrecio] = useState(0.00);
     const [calidad, setCalidad] = useState("");
     const [marca, setMarca] = useState("");
     const [fechaCompra, setFechaCompra] = useState("");
@@ -133,6 +113,7 @@ export default function RegistroProductoModal({ proveedores, tipoProductos }: Re
 
             if (response.status === 200) {
                 resetForm();
+                window.location.reload();
             }
         } catch (error: any) {
             setErrors(error.response?.data?.errors || {});
@@ -364,29 +345,29 @@ export default function RegistroProductoModal({ proveedores, tipoProductos }: Re
 
                         )}
                         <div>
-                            <Label>Registrar Producto</Label>
+                            <Label>Modelo de producto</Label>
                             <Input
                                 placeholder="Nombre del producto"
                                 value={nombreProducto}
-                                onChange={(e) => setNombreProducto(e.target.value)}
+                                onChange={(e) => setNombreProducto(e.target.value.toUpperCase())}
                             />
                         </div>
                         <div>
-                            <Label>Cantidad total</Label>
+                            <Label>Cantidad total a comprar</Label>
                             <Input
-                                placeholder="Cantidad"
+                                placeholder="Cantidad de la compra"
                                 type="number"
-                                value={cantidad}
                                 onChange={(e) => setCantidad(Number(e.target.value))}
                             />
                         </div>
                         <div>
-                            <Label>Precio total de compra</Label>
+                            <Label>Precio total de compra en (Bs)</Label>
                             <Input
-                                placeholder="Precio"
+                                placeholder="0.00 Bs"
                                 type="number"
-                                value={precio}
                                 onChange={(e) => setPrecio(Number(e.target.value))}
+                                step="0.01"
+                                min="0"
                             />
                         </div>
                         <div>
@@ -394,7 +375,7 @@ export default function RegistroProductoModal({ proveedores, tipoProductos }: Re
                             <Input
                                 placeholder="Calidad"
                                 value={calidad}
-                                onChange={(e) => setCalidad(e.target.value)}
+                                onChange={(e) => setCalidad(e.target.value.toUpperCase())}
                             />
                         </div>
                         <div>
@@ -402,7 +383,7 @@ export default function RegistroProductoModal({ proveedores, tipoProductos }: Re
                             <Input
                                 placeholder="Marca"
                                 value={marca}
-                                onChange={(e) => setMarca(e.target.value)}
+                                onChange={(e) => setMarca(e.target.value.toUpperCase())}
                             />
                         </div>
                         <div>
@@ -410,8 +391,9 @@ export default function RegistroProductoModal({ proveedores, tipoProductos }: Re
                             <Input
                                 placeholder="Fecha de compra"
                                 type="date"
-                                value={new Date().toISOString().split("T")[0]} // Formatear la fecha a YYYY-MM-DD
-                                onChange={(e) => setFechaCompra(e.target.value)} // Para actualizar el estado si es necesario
+                                value={new Date().toISOString().split("T")[0]}
+                                onChange={(e) => setFechaCompra(e.target.value)}
+                                disabled
                             />
                         </div>
                         <Button onClick={handleFinalizar} disabled={isLoading || !nombreProducto || !cantidad || !precio}>
@@ -419,8 +401,6 @@ export default function RegistroProductoModal({ proveedores, tipoProductos }: Re
                         </Button>
                     </div>
                 )}
-
-
                 <DialogFooter>
                     {step > 1 && <Button onClick={prevStep} variant="outline">Atrás</Button>}
                     <Button onClick={nextStep} disabled={step >= steps.length}>

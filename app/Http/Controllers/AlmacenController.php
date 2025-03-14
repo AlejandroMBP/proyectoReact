@@ -83,17 +83,6 @@ class AlmacenController extends Controller
     public function registrarProducto(Request $request)
     {
         Log::debug('Datos recibidos en registrarProducto: ', $request->all());
-        // {"proveedor":7,
-        //     "tipoProducto":4,
-        //     "nombre":"tryet",
-        //     "cantidad":6573,
-        //     "precio":76959,
-        //     "calidad":"fdgfd",
-        //     "marca":"dghdfgh",
-        //     "fechaCompra":"2025-03-09",
-        //     "estado":"disponible"
-        // }
-
         $validated = $request->validate([
             'nombre' => 'required|string|max:255',
             'cantidad' => 'required|integer|min:1',
