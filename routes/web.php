@@ -5,6 +5,8 @@ use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\RolesPermisosController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VentaController;
+use App\Models\Producto;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -33,10 +35,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/almacen/proveedor', [AlmacenController::class, 'store'])->name('proveedor.store');
     Route::post('/almacen/producto', [AlmacenController::class, 'crearProducto'])->name('procto.store');
     Route::post('/almacen/producto/registrar', [AlmacenController::class, 'registrarProducto'])->name('almacen.crear');
+    Route::post('/almacen/puesta-venta', [AlmacenController::class, 'ponerAlaVenta'])->name('almacen.venta');
 
     Route::get('/pedido', [PedidoController::class, 'index'])->name('pedido.index');
 
-    Route::get('/venta', [VentaController::class, 'index'])->name('venta.index');
+    Route::get('/pantallas', [VentaController::class, 'index'])->name('pantallas.index');
+
+    Route::get('/productos', [VentaController::class, 'VentaPantallas'])->name('pantallas.show');
 });
 
 require __DIR__ . '/settings.php';

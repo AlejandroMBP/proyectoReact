@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BarChart3, BookOpen, Folder, LayoutGrid, Package, ShoppingCart, User, Shield } from 'lucide-react';
+import { Shield, LayoutGrid, Package, ShoppingCart, User, Box, Monitor, BatteryCharging, Package2, Phone, MapPin } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -36,26 +36,38 @@ const mainNavItems: NavItem[] = [
     {
         title: 'prestamos',
         url: "#",
-        icon: ShoppingCart,
-    },
-    {
-        title: 'tienda',
-        url: "/venta",
-        icon: BarChart3,
+        icon: Box,
     },
 ];
+const secondNavItems: NavItem[] = [
+    {
+        title: 'Pantallas',
+        url: "/pantallas",
+        icon: Monitor,
+    },
+    {
+        title: 'Baterias',
+        url: "#",
+        icon: BatteryCharging,
+    },
+    {
+        title: 'Otros',
+        url: "",
+        icon: Package2,
+    },
+]
 
 const footerNavItems: NavItem[] = [
-    // {
-    //     title: 'Repository',
-    //     url: 'https://github.com/laravel/react-starter-kit',
-    //     icon: Folder,
-    // },
-    // {
-    //     title: 'Documentation',
-    //     url: 'https://laravel.com/docs/starter-kits',
-    //     icon: BookOpen,
-    // },
+    {
+        title: 'Contactos',
+        url: '#',
+        icon: Phone,
+    },
+    {
+        title: 'Ubicacion',
+        url: '#',
+        icon: MapPin,
+    },
 ];
 
 export function AppSidebar() {
@@ -74,7 +86,9 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={mainNavItems} titulo='Menu' />
+                <hr className="my-2 border-t border-gray-300 dark:border-gray-700" />
+                <NavMain items={secondNavItems} titulo='Tienda' />
             </SidebarContent>
 
             <SidebarFooter>

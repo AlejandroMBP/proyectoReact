@@ -115,4 +115,51 @@ class AlmacenController extends Controller
             ]);
         }
     }
+    public function ponerAlaVenta(Request $request)
+    {
+        // Registrar en logs los datos recibidos
+        Log::debug('Datos recibidos en la petición:', $request->all());
+
+        // Validar los datos entrantes
+        $request->validate([
+            'productos' => 'required|array',
+            'productos.*.id' => 'required|exists:productos,id',
+            'productos.*.precioVenta' => 'required|numeric|min:0',
+            'productos.*.fechaInicio' => 'required|date',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            foreach ($request->productos as $productoData) {
+                DB::insert("
+                INSERT INTO precios_productos (id_producto, precio, fecha_inicio, fecha_fin, created_at, updated_at)
+                VALUES (?, ?, ?, NULL, NOW(), NOW())
+            ", [
+                    $productoData['id'],
+                    $productoData['precioVenta'],
+                    $productoData['fechaInicio'],
+                ]);
+            }
+
+            DB::table('productos')
+                ->whereIn('id', array_column($request->productos, 'id'))
+                ->update(['estado' => 'disponible']);
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Precios registrados correctamente.',
+                'success' => true
+            ], 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error al registrar precios:', ['error' => $e->getMessage()]);
+
+            return response()->json([
+                'message' => 'Error al registrar los precios.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
     Table,
@@ -20,7 +19,8 @@ import {
     getFilteredRowModel,
     VisibilityState,
     SortingState,
-    getSortedRowModel
+    getSortedRowModel,
+    RowSelectionState,
 } from "@tanstack/react-table";
 import { Input } from "./ui/input";
 import DatatablePagination from "./datatable-pagination";
@@ -31,6 +31,8 @@ import {
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
+import PonerVentaButton from "@/pages/Almacen/PonerVentaButton";
+
 interface DatatableProps<TData, TValue> {
     data: TData[];
     columns: ColumnDef<TData, TValue>[];
@@ -51,6 +53,7 @@ export default function Datatable<TData, TValue>({
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
     const table = useReactTable({
         data,
         columns,
@@ -62,67 +65,65 @@ export default function Datatable<TData, TValue>({
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
         onColumnVisibilityChange: setColumnVisibility,
+        onRowSelectionChange: setRowSelection,
         state: {
             pagination,
             sorting,
             columnFilters,
             columnVisibility,
+            rowSelection,
         }
     });
+
     return (
         <div className="space-y-4">
-            <div className=" flex items-center justify-between">
+            {/* Filtros y Controles */}
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                 {globalFilterColumn && (
                     <Input
-                        placeholder="Buscar...."
-                        value={
-                            (table.getColumn(globalFilterColumn)?.getFilterValue() as string) ?? ""
-                        }
+                        placeholder="Buscar..."
+                        value={(table.getColumn(globalFilterColumn)?.getFilterValue() as string) ?? ""}
                         onChange={(event) =>
                             table.getColumn(globalFilterColumn)?.setFilterValue(event.target.value)
                         }
-                        className="max-w-sm"
+                        className="w-full md:max-w-sm"
                     />
                 )}
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Column
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        {table.getAllColumns().filter((column) => column.getCanHide())
-                            .map((column) => {
-                                return (
-                                    <DropdownMenuCheckboxItem
-                                        key={column.id}
-                                        className="capitalize"
-                                        checked={column.getIsVisible()}
-                                        onCheckedChange={(value) =>
-                                            column.toggleVisibility(!!value)
-                                        }
-                                    >
-                                        {column.id}
-                                    </DropdownMenuCheckboxItem>
-                                )
-                            })}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex items-center gap-2">
+                    <PonerVentaButton selectedRows={table.getSelectedRowModel().rows.map(row => row.original)} />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline">Columnas</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            {table.getAllColumns().filter((column) => column.getCanHide()).map((column) => (
+                                <DropdownMenuCheckboxItem
+                                    key={column.id}
+                                    className="capitalize"
+                                    checked={column.getIsVisible()}
+                                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                                >
+                                    {column.id}
+                                </DropdownMenuCheckboxItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
-            <div className="rounded-md border">
-                <Table>
+
+
+            {/* Tabla con Scroll en Móviles */}
+            <div className="rounded-md border overflow-x-auto">
+                <Table className="min-w-full">
                     {caption && <TableCaption>{caption}</TableCaption>}
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
+                                    <TableHead key={header.id} className="px-2 py-3 text-sm">
                                         {header.isPlaceholder
                                             ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
+                                            : flexRender(header.column.columnDef.header, header.getContext())}
                                     </TableHead>
                                 ))}
                             </TableRow>
@@ -131,9 +132,9 @@ export default function Datatable<TData, TValue>({
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id}>
+                                <TableRow key={row.id} className="text-sm">
                                     {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell key={cell.id} className="px-2 py-2">
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}
@@ -142,13 +143,15 @@ export default function Datatable<TData, TValue>({
                         ) : (
                             <TableRow>
                                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                                    No se encontro resultados
+                                    No se encontraron resultados
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
-                </Table >
-            </div >
+                </Table>
+            </div>
+
+            {/* Paginación */}
             <DatatablePagination table={table} />
         </div>
     );

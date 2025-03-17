@@ -36,7 +36,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
     };
 
     return (
-        <AuthLayout title="Iniciar sesión" description="Ingresa tu correo y contraseña para acceder">
+        <AuthLayout title="SIAL" description="Ingresa tu correo y contraseña para acceder">
             <Head title="Iniciar sesión" />
             <div className="flex items-center justify-center py-10">
                 <div className="flex w-full max-w-5xl bg-white dark:bg-sidebar shadow-xl rounded-2xl overflow-hidden">

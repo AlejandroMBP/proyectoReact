@@ -1,5 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
-import type { productos } from ".";
+// import type { productos } from "@/pages/Pantallas";
+import type { Producto } from ".";
+
 import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,54 +13,33 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DatatableColumnHeader from "@/components/datatable-column-header";
-import DatatableRowSelectionHeader from "@/components/datatable-row-selection-header";
-import DatatableRowSelectionCell from "@/components/datatable-row-selection-cell";
-export const columns: ColumnDef<productos>[] = [
+export const columns: ColumnDef<Producto>[] = [
     {
-        id: "select",
-        header: ({ table }) => <DatatableRowSelectionHeader table={table} />,
-        cell: ({ row }) => <DatatableRowSelectionCell row={row} />,
-        enableSorting: false,
-    },
-    {
-        accessorKey: 'id',
+        accessorKey: 'producto_id',
         header: 'ID',
         enableHiding: false,
     },
     {
-        accessorKey: 'nombre',
+        accessorKey: 'producto_nombre',
         header: ({ column }) => (
-            <DatatableColumnHeader title="Nombre" column={column} />
+            <DatatableColumnHeader title="Nombre de producto" column={column} />
         ),
     },
     {
         accessorKey: 'cantidad',
-        header: 'Cantidad',
+        header: 'Cantidad disponible',
     },
+
+
     {
-        accessorKey: 'calidad',
-        header: 'Calidad',
-    },
-    {
-        accessorKey: 'tipo_producto_nombre',
-        header: 'Tipo de producto',
-    },
-    {
-        accessorKey: 'proveedor_nombre',
-        header: 'Proveedor',
-    },
-    {
-        accessorKey: 'fecha_compra',
+        accessorKey: 'fecha_inicio',
         header: 'Fecha de compra',
     },
     {
-        accessorKey: 'precio',
+        accessorKey: 'precio_producto',
         header: 'Precio',
     },
-    {
-        accessorKey: 'marca',
-        header: 'Marca',
-    },
+
     {
         accessorKey: 'estado',
         header: 'Estado',

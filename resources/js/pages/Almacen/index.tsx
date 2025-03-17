@@ -4,6 +4,7 @@ import RegistroProductoModal from "./RegistroProductoModal";
 import { useState } from "react";
 import Datatable from "@/components/datatable";
 import { columns } from "./columns";
+import { Button } from "@/components/ui/button";
 interface Proveedor {
     id: number;
     nombre: string;
@@ -69,6 +70,7 @@ export default function AlmacenIndex({ proveedores, tipoProductos, productos }: 
                         Administra el almacén de la plataforma. Puedes agregar, editar y eliminar registros.
                     </p>
                 </div>
+
                 <RegistroProductoModal proveedores={proveedores} tipoProductos={tipoProductos} />
 
                 <Datatable
@@ -77,6 +79,7 @@ export default function AlmacenIndex({ proveedores, tipoProductos, productos }: 
                     caption="Lista de productos"
                     globalFilterColumn={"nombre"}
                 />
+
             </div>
         </AppLayout>
     );
